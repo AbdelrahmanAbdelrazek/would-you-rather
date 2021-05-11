@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { handleInitialData } from "./actions/common";
+import Login from "./components/Login";
+import Home from "./components/Home";
+import Header from "./components/Header";
+import PollDetails from "./components/PollDetails";
+import Leaderboard from "./components/Leaderboard";
+import NewQuestion from "./components/NewQuestion";
+import ProtectedRoute from "./ProtectedRoute";
+import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
+class App extends Component {
+  componentDidMount() {
+    this.props.handleInitialData();
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  render() {
+    const { authUser } = this.props;
+    return (
+      <div>
+        {authUser && <Header active="home" authUser={authUser} />}
+        <Switch>
+          <Route path="/login" component={Login} />
+          <ProtectedRoute exact path="/" component={Home} />
+          <ProtectedRoute path="/questions" component={PollDetails} />
+          <ProtectedRoute path="/leaderboard" component={Leaderboard} />
+          <ProtectedRoute path="/add" component={NewQuestion} />
+        </Switch>
+      </div>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps({ authUser }) {
+  return {
+    authUser,
+  };
+}
+export default connect(mapStateToProps, { handleInitialData })(withRouter(App));
