@@ -76,7 +76,7 @@ class NewQuestion extends Component {
             <div>
                 <TextField
                   label="Option One"
-                  error={true}
+                  error={this.state.error1}
                   required={true}
                   onChange={(e) =>
                     this.setState({

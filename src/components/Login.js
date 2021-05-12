@@ -12,7 +12,7 @@ import { withStyles } from "@material-ui/core/styles";
 class Login extends Component {
   onChange(e) {
     this.props.setAuthUser(e.target.value);
-    let redirect = this.props.location.state.redirect_to;
+    let redirect = this.props.location.state? this.props.location.state.redirect_to : undefined;
     if(redirect){
         this.props.history.push(redirect)
     }else{
